@@ -15,6 +15,7 @@ import (
 type apiConfig struct {
 	platform       string
 	jwtSecret      string
+	pokaKey        string
 	fileserverHits atomic.Int32
 	db             *database.Queries
 }
@@ -36,6 +37,10 @@ func main() {
 	if jwtSecret == "" {
 		log.Fatal("JWT_SECRET environment variable is not set")
 	}
+	pokaKey := os.Getenv("POLKA_KEY")
+	if pokaKey == "" {
+		log.Fatal("POLKA_KEY environment variable is not set")
+	}
 
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -46,6 +51,7 @@ func main() {
 	apiCfg := apiConfig{
 		fileserverHits: atomic.Int32{},
 		jwtSecret:      jwtSecret,
+		pokaKey:        pokaKey,
 		db:             dbQueries,
 		platform:       platform,
 	}
