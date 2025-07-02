@@ -20,3 +20,10 @@ SET updated_at = NOW(),
     hashed_password = $2
 WHERE id = $3
 RETURNING *;
+
+-- name: UpgradeToChirpyRed :one
+UPDATE users
+SET is_chirpy_red = true,
+  updated_at = NOW()
+WHERE id = $1
+RETURNING *;
